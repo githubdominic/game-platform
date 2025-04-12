@@ -3,6 +3,17 @@ import { useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { GameCategory } from '../types';
 
+// 游戏分类的中文映射
+const CATEGORY_LABELS: Record<GameCategory, string> = {
+  '2D': '2D',
+  '3D': '3D',
+  'Puzzle': '益智',
+  'Action': '动作',
+  'Strategy': '策略',
+  'RPG': '角色扮演',
+  'Arcade': '街机'
+};
+
 const CATEGORIES: GameCategory[] = ['2D', '3D', 'Puzzle', 'Action', 'Strategy', 'RPG', 'Arcade'];
 
 export default function GameControls() {
@@ -25,7 +36,7 @@ export default function GameControls() {
           type="text"
           value={localSearch}
           onChange={handleSearch}
-          placeholder="Search games..."
+          placeholder="搜索游戏..."
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
         />
         <svg
@@ -51,7 +62,7 @@ export default function GameControls() {
           }`}
           onClick={() => handleCategoryChange(null)}
         >
-          All
+          全部
         </button>
         {CATEGORIES.map((category) => (
           <button
@@ -63,7 +74,7 @@ export default function GameControls() {
             }`}
             onClick={() => handleCategoryChange(category)}
           >
-            {category}
+            {CATEGORY_LABELS[category]}
           </button>
         ))}
       </div>

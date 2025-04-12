@@ -28,7 +28,7 @@ export default function GameGrid() {
         ))
       ) : (
         <div className="col-span-full text-center py-10">
-          <p className="text-gray-500 dark:text-gray-400">No games found matching your criteria</p>
+          <p className="text-gray-500 dark:text-gray-400">没有找到符合条件的游戏</p>
         </div>
       )}
     </div>

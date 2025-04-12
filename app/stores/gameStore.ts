@@ -5,8 +5,8 @@ import { Game, GameCategory, GamesState } from '../types';
 const sampleGames: Game[] = [
   {
     id: '1',
-    title: '3D Cube Runner',
-    description: 'Navigate through obstacles in this 3D runner game',
+    title: '3D 立方体跑酷',
+    description: '在这个3D跑酷游戏中穿越障碍物',
     thumbnail: '/games/cube-runner-thumb.jpg',
     path: '/games/cube-runner',
     categories: ['3D', 'Action'],
@@ -14,8 +14,8 @@ const sampleGames: Game[] = [
   },
   {
     id: '2',
-    title: '2D Platformer',
-    description: 'Classic platformer with modern mechanics',
+    title: '2D 平台跳跃',
+    description: '经典平台跳跃游戏，融合现代机制',
     thumbnail: '/games/platformer-thumb.jpg',
     path: '/games/platformer',
     categories: ['2D', 'Action'],
@@ -23,8 +23,8 @@ const sampleGames: Game[] = [
   },
   {
     id: '3',
-    title: 'Super Mario',
-    description: 'Classic Super Mario style platformer game',
+    title: '超级玛丽',
+    description: '经典超级玛丽风格平台游戏',
     thumbnail: '/games/super-mario-thumb.jpg',
     path: '/games/super-mario',
     categories: ['2D', 'Action', 'Arcade'],

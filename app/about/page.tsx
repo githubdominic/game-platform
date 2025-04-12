@@ -1,42 +1,41 @@
 export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">About Game Platform</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">关于游戏平台</h1>
       
       <div className="prose dark:prose-invert lg:prose-lg mx-auto">
         <p>
-          Game Platform is a modern web application designed to host and showcase a variety of games, 
-          from simple 2D experiences to immersive 3D adventures. Our platform is built with 
-          expandability in mind, allowing new games to be easily added and integrated.
+          游戏平台是一个现代化的网络应用程序，专为托管和展示各种游戏而设计，从简单的2D体验到沉浸式的3D冒险。
+          我们的平台设计注重可扩展性，使新游戏能够轻松添加和集成。
         </p>
         
-        <h2>Technical Stack</h2>
+        <h2>技术栈</h2>
         <p>
-          This platform is built using:
+          此平台使用以下技术构建：
         </p>
         <ul>
-          <li><strong>Next.js</strong> - For server-side rendering and routing</li>
-          <li><strong>React</strong> - For building user interfaces</li>
-          <li><strong>TypeScript</strong> - For type safety and developer experience</li>
-          <li><strong>Three.js</strong> - For 3D rendering</li>
-          <li><strong>React Three Fiber</strong> - React renderer for Three.js</li>
-          <li><strong>Tailwind CSS</strong> - For styling</li>
-          <li><strong>Zustand</strong> - For state management</li>
+          <li><strong>Next.js</strong> - 用于服务端渲染和路由</li>
+          <li><strong>React</strong> - 用于构建用户界面</li>
+          <li><strong>TypeScript</strong> - 用于类型安全和开发体验</li>
+          <li><strong>Three.js</strong> - 用于3D渲染</li>
+          <li><strong>React Three Fiber</strong> - Three.js的React渲染器</li>
+          <li><strong>Tailwind CSS</strong> - 用于样式设计</li>
+          <li><strong>Zustand</strong> - 用于状态管理</li>
         </ul>
         
-        <h2>Adding New Games</h2>
+        <h2>添加新游戏</h2>
         <p>
-          The platform is designed to be easily expandable. New games can be added by:
+          平台设计为易于扩展。可以通过以下方式添加新游戏：
         </p>
         <ol>
-          <li>Creating a new game component in the games directory</li>
-          <li>Implementing game logic using appropriate libraries (Three.js for 3D, Canvas API for 2D)</li>
-          <li>Adding game metadata to the game store</li>
+          <li>在games目录中创建新的游戏组件</li>
+          <li>使用适当的库实现游戏逻辑（3D游戏使用Three.js，2D游戏使用Canvas API）</li>
+          <li>将游戏元数据添加到游戏商店</li>
         </ol>
         
-        <h2>Contact</h2>
+        <h2>联系我们</h2>
         <p>
-          For more information about this platform or to contribute, please contact the development team.
+          有关此平台的更多信息或贡献内容，请联系开发团队。
         </p>
       </div>
     </div>
