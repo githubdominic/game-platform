@@ -7,15 +7,17 @@ interface PlatformerGameProps {
 }
 
 // Game constants
-const GRAVITY = 0.5;
-const JUMP_POWER = -12;
+const GRAVITY = 0.3;
+const JUMP_POWER = -14;
 const MOVE_SPEED = 5;
-const PLATFORM_WIDTH = 100;
+const PLATFORM_WIDTH = 150;
 const PLATFORM_HEIGHT = 20;
 const PLAYER_WIDTH = 30;
 const PLAYER_HEIGHT = 30;
 const COIN_SIZE = 15;
 const COIN_VALUE = 10;
+const PLATFORM_GAP_MIN = 30;
+const PLATFORM_GAP_MAX = 150;
 
 // Game classes
 class Player {
@@ -157,9 +159,9 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
 
     // Create initial platforms
     for (let i = 0; i < 10; i++) {
-      const x = i === 0 ? 0 : lastPlatformX + Math.random() * 200 + 50;
-      const y = i === 0 ? canvas.height - 100 : canvas.height - 100 - Math.random() * 200;
-      const width = i === 0 ? 200 : PLATFORM_WIDTH + Math.random() * 100;
+      const x = i === 0 ? 0 : lastPlatformX + Math.random() * (PLATFORM_GAP_MAX - PLATFORM_GAP_MIN) + PLATFORM_GAP_MIN;
+      const y = i === 0 ? canvas.height - 100 : canvas.height - 100 - Math.random() * 150;
+      const width = i === 0 ? 300 : PLATFORM_WIDTH + Math.random() * 100;
       
       const platform = new Platform(x, y, width);
       platforms.push(platform);
@@ -211,10 +213,10 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
       for (const platform of platforms) {
         if (
           player.velocityY > 0 &&
-          player.x + player.width > platform.x &&
-          player.x < platform.x + platform.width &&
-          player.y + player.height > platform.y &&
-          player.y + player.height < platform.y + platform.height + player.velocityY
+          player.x + player.width > platform.x - 5 &&
+          player.x < platform.x + platform.width + 5 &&
+          player.y + player.height > platform.y - 5 &&
+          player.y + player.height < platform.y + platform.height + player.velocityY + 5
         ) {
           player.isJumping = false;
           player.velocityY = 0;
@@ -244,8 +246,8 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
 
       // Add new platforms and coins as player moves right
       if (lastPlatformX - cameraOffset < canvas.width * 1.5) {
-        const x = lastPlatformX + Math.random() * 200 + 50;
-        const y = canvas.height - 100 - Math.random() * 200;
+        const x = lastPlatformX + Math.random() * (PLATFORM_GAP_MAX - PLATFORM_GAP_MIN) + PLATFORM_GAP_MIN;
+        const y = canvas.height - 100 - Math.random() * 150;
         const width = PLATFORM_WIDTH + Math.random() * 100;
         
         platforms.push(new Platform(x, y, width));
