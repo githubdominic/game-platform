@@ -179,6 +179,12 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
     const keys: { [key: string]: boolean } = {};
     
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 防止空格键等按键引起页面滚动
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+          e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+      }
+      
       keys[e.key] = true;
       
       if ((e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') && !player.isJumping) {
@@ -187,6 +193,12 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
     };
     
     const handleKeyUp = (e: KeyboardEvent) => {
+      // 防止空格键等按键引起页面滚动
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+          e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+      }
+      
       keys[e.key] = false;
     };
 

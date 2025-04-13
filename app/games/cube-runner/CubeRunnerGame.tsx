@@ -40,6 +40,12 @@ function Player({ position, onCollision }: PlayerProps) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 防止方向键引起页面滚动
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+          e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+      }
+      
       if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
         setMoveDirection(-1);
       } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
@@ -48,6 +54,12 @@ function Player({ position, onCollision }: PlayerProps) {
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
+      // 防止方向键引起页面滚动
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+          e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+      }
+      
       if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D'].includes(e.key)) {
         setMoveDirection(0);
       }

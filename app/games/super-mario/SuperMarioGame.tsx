@@ -396,12 +396,19 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
     // Add end flag
     flag = new Flag(levelLength - 200, groundY - FLAG_HEIGHT);
 
-    // Input handler
-    const keys: { [key: string]: boolean } = {};
+    // Input handling
+    const keys: Record<string, boolean> = {};
     
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 防止空格键等按键引起页面滚动
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+          e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+      }
+      
       keys[e.key] = true;
       
+      // Pause game with P key
       if (e.key === 'p' || e.key === 'P') {
         setIsPaused(prev => !prev);
       }
@@ -412,6 +419,12 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
     };
     
     const handleKeyUp = (e: KeyboardEvent) => {
+      // 防止空格键等按键引起页面滚动
+      if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
+          e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+      }
+      
       keys[e.key] = false;
     };
 
