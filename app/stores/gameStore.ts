@@ -30,6 +30,16 @@ const sampleGames: Game[] = [
     categories: ['2D', 'Action', 'Arcade'],
     isNew: true,
   },
+  {
+    id: '4',
+    title: '小动物农场',
+    description: '适合儿童的互动农场游戏，点击动物听声音',
+    thumbnail: '/games/animal-farm-thumb.jpg',
+    path: '/games/animal-farm',
+    categories: ['2D', 'Children'],
+    isNew: true,
+    featured: true,
+  },
 ];
 
 export const useGameStore = create<GamesState>((set) => ({

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试动物音频</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .audio-test {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .instructions {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>动物声音测试页面</h1>
+    
+    <div class="instructions">
+        <h2>说明</h2>
+        <p>此页面用于测试动物声音文件是否能正常播放。如果按钮点击后没有声音，可能是音频文件有问题。</p>
+        <p><strong>提示</strong>: 请确保将正确的音频文件放在 <code>/public/games/animals/</code> 目录中，并命名为 cow.mp3, dog.mp3 等。</p>
+    </div>
+    
+    <div class="audio-test">
+        <h2>直接播放测试</h2>
+        <button onclick="playSound('cow')">播放牛声音</button>
+        <button onclick="playSound('dog')">播放狗声音</button>
+        <button onclick="playSound('cat')">播放猫声音</button>
+        <button onclick="playSound('chicken')">播放鸡声音</button>
+        <button onclick="playSound('sheep')">播放羊声音</button>
+    </div>
+    
+    <div class="audio-test">
+        <h2>音频元素测试</h2>
+        <audio controls src="/games/animals/cow.mp3"></audio>
+        <p>牛声音</p>
+        
+        <audio controls src="/games/animals/dog.mp3"></audio>
+        <p>狗声音</p>
+        
+        <audio controls src="/games/animals/cat.mp3"></audio>
+        <p>猫声音</p>
+        
+        <audio controls src="/games/animals/chicken.mp3"></audio>
+        <p>鸡声音</p>
+        
+        <audio controls src="/games/animals/sheep.mp3"></audio>
+        <p>羊声音</p>
+    </div>
+    
+    <script>
+        function playSound(animal) {
+            const audio = new Audio(`/games/animals/${animal}.mp3`);
+            audio.volume = 1.0;
+            
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error(`音频播放错误: ${error.message}`);
+                    alert(`播放${animal}的声音失败: ${error.message}`);
+                });
+            }
+        }
+    </script>
+</body>
+</html> 

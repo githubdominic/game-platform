@@ -1,6 +1,6 @@
 // Game types for our platform
 
-export type GameCategory = '2D' | '3D' | 'Puzzle' | 'Action' | 'Strategy' | 'RPG' | 'Arcade';
+export type GameCategory = '2D' | '3D' | 'Puzzle' | 'Action' | 'Strategy' | 'RPG' | 'Arcade' | 'Children';
 
 export interface Game {
   id: string;

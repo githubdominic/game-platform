@@ -11,10 +11,11 @@ const CATEGORY_LABELS: Record<GameCategory, string> = {
   'Action': '动作',
   'Strategy': '策略',
   'RPG': '角色扮演',
-  'Arcade': '街机'
+  'Arcade': '街机',
+  'Children': '儿童'
 };
 
-const CATEGORIES: GameCategory[] = ['2D', '3D', 'Puzzle', 'Action', 'Strategy', 'RPG', 'Arcade'];
+const CATEGORIES: GameCategory[] = ['2D', '3D', 'Puzzle', 'Action', 'Strategy', 'RPG', 'Arcade', 'Children'];
 
 export default function GameControls() {
   const { setSearchQuery, setFilterCategory, filterCategory } = useGameStore();
@@ -37,7 +38,7 @@ export default function GameControls() {
           value={localSearch}
           onChange={handleSearch}
           placeholder="搜索游戏..."
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
         />
         <svg
           className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 dark:text-gray-500"
@@ -57,7 +58,7 @@ export default function GameControls() {
         <button
           className={`px-3 py-1 rounded-full text-sm ${
             filterCategory === null
-              ? 'bg-blue-500 text-white'
+              ? 'bg-indigo-500 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
           }`}
           onClick={() => handleCategoryChange(null)}
@@ -69,7 +70,7 @@ export default function GameControls() {
             key={category}
             className={`px-3 py-1 rounded-full text-sm ${
               filterCategory === category
-                ? 'bg-blue-500 text-white'
+                ? 'bg-indigo-500 text-white'
                 : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
             }`}
             onClick={() => handleCategoryChange(category)}
