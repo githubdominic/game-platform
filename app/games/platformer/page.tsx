@@ -31,16 +31,16 @@ export default function PlatformerPage() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)] max-w-4xl mx-auto px-4">
       <h1 className="text-3xl font-bold mb-4">2D 平台跳跃</h1>
       
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center h-[500px] w-full bg-gray-800 rounded-lg">
+        <div className="flex flex-col items-center justify-center h-[500px] w-full max-w-3xl bg-gray-800 rounded-lg">
           <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
           <p className="mt-4 text-white">加载游戏中...</p>
         </div>
       ) : isGameOver ? (
-        <div className="flex flex-col items-center justify-center h-[500px] w-full bg-gray-800 rounded-lg">
+        <div className="flex flex-col items-center justify-center h-[500px] w-full max-w-3xl bg-gray-800 rounded-lg">
           <h2 className="text-2xl font-bold text-white mb-2">游戏结束！</h2>
           <p className="text-xl text-white mb-6">你的得分: {score}</p>
           <div className="flex space-x-4">
@@ -59,7 +59,7 @@ export default function PlatformerPage() {
           </div>
         </div>
       ) : (
-        <div className="relative w-full h-[500px] bg-gray-800 rounded-lg overflow-hidden">
+        <div className="relative w-full max-w-3xl h-[500px] bg-gray-800 rounded-lg overflow-hidden">
           <div className="absolute top-4 left-4 z-10 bg-black/50 text-white px-3 py-1 rounded">
             得分: {score}
           </div>
@@ -67,7 +67,7 @@ export default function PlatformerPage() {
         </div>
       )}
       
-      <div className="mt-6 max-w-2xl">
+      <div className="mt-6 max-w-3xl">
         <h2 className="text-xl font-bold mb-2">游戏说明</h2>
         <p className="mb-4">
           使用方向键或WASD移动和跳跃。收集金币增加得分，避免从平台上掉落。

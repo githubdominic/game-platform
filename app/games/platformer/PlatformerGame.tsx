@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface PlatformerGameProps {
   onGameOver: (score: number) => void;
@@ -108,6 +108,29 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameStarted, setGameStarted] = useState(false);
   const [score, setScore] = useState(0);
+  
+  // 使用useRef存储游戏状态，避免在渲染期间调用父组件的更新函数
+  const scoreRef = useRef(0);
+  const gameOverRef = useRef(false);
+
+  // 使用useCallback包装回调函数
+  const handleScoreUpdate = useCallback((newScore: number) => {
+    scoreRef.current = newScore;
+    setScore(newScore);
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onScoreUpdate(newScore);
+    });
+  }, [onScoreUpdate]);
+
+  const handleGameOver = useCallback((finalScore: number) => {
+    if (gameOverRef.current) return; // 防止重复调用
+    gameOverRef.current = true;
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onGameOver(finalScore);
+    });
+  }, [onGameOver]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -115,6 +138,10 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    // 重置状态
+    gameOverRef.current = false;
+    scoreRef.current = 0;
 
     // Set canvas dimensions
     canvas.width = canvas.clientWidth;
@@ -205,11 +232,8 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
           player.y < coin.y + coin.size
         ) {
           coin.collected = true;
-          setScore(prevScore => {
-            const newScore = prevScore + COIN_VALUE;
-            onScoreUpdate(newScore);
-            return newScore;
-          });
+          const newScore = scoreRef.current + COIN_VALUE;
+          handleScoreUpdate(newScore);
         }
       }
 
@@ -242,7 +266,7 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
       // Check game over condition (falling off-screen)
       if (player.y > canvas.height) {
         isGameOver = true;
-        onGameOver(score);
+        handleGameOver(scoreRef.current);
       }
     };
 
@@ -270,7 +294,7 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
     };
 
     const gameLoop = () => {
-      if (!isGameOver) {
+      if (!isGameOver && !gameOverRef.current) {
         update();
         render();
         requestAnimationFrame(gameLoop);
@@ -285,7 +309,7 @@ export default function PlatformerGame({ onGameOver, onScoreUpdate }: Platformer
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [onGameOver, onScoreUpdate]);
+  }, [handleScoreUpdate, handleGameOver]);
 
   return (
     <canvas 

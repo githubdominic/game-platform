@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface SuperMarioGameProps {
   onGameOver: (score: number) => void;
@@ -277,6 +277,46 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
   const [lives, setLives] = useState(3);
   const [levelComplete, setLevelComplete] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  
+  // 使用useRef存储游戏状态，避免在渲染期间调用父组件的更新函数
+  const scoreRef = useRef(0);
+  const livesRef = useRef(3);
+  const gameOverRef = useRef(false);
+  const levelCompleteRef = useRef(false);
+
+  // 使用useCallback包装回调函数
+  const handleScoreUpdate = useCallback((newScore: number) => {
+    scoreRef.current = newScore;
+    setScore(newScore);
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onScoreUpdate(newScore);
+    });
+  }, [onScoreUpdate]);
+
+  const handleLivesUpdate = useCallback((newLives: number) => {
+    livesRef.current = newLives;
+    setLives(newLives);
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onLivesUpdate(newLives);
+    });
+  }, [onLivesUpdate]);
+
+  const handleGameOver = useCallback((finalScore: number) => {
+    if (gameOverRef.current) return; // 防止重复调用
+    gameOverRef.current = true;
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onGameOver(finalScore);
+    });
+  }, [onGameOver]);
+
+  const handleLevelComplete = useCallback(() => {
+    if (levelCompleteRef.current) return;
+    levelCompleteRef.current = true;
+    setLevelComplete(true);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -284,6 +324,12 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    // 重置状态
+    gameOverRef.current = false;
+    scoreRef.current = score;
+    livesRef.current = lives;
+    levelCompleteRef.current = levelComplete;
 
     // Set canvas dimensions
     canvas.width = canvas.clientWidth;
@@ -374,7 +420,7 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
 
     // Game loop
     const update = () => {
-      if (isGameOver || levelComplete || isPaused) return;
+      if (isGameOver || levelCompleteRef.current || isPaused) return;
 
       // Player movement
       mario.velocityX = 0;
@@ -435,13 +481,10 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
             
             // Animate coin rising and then collect it
             setTimeout(() => {
-              if (!isGameOver) {
+              if (!isGameOver && !gameOverRef.current) {
                 coin.collected = true;
-                setScore(prevScore => {
-                  const newScore = prevScore + COIN_VALUE;
-                  onScoreUpdate(newScore);
-                  return newScore;
-                });
+                const newScore = scoreRef.current + COIN_VALUE;
+                handleScoreUpdate(newScore);
               }
             }, 500);
           }
@@ -474,11 +517,8 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
           mario.y < coin.y + coin.size
         ) {
           coin.collected = true;
-          setScore(prevScore => {
-            const newScore = prevScore + COIN_VALUE;
-            onScoreUpdate(newScore);
-            return newScore;
-          });
+          const newScore = scoreRef.current + COIN_VALUE;
+          handleScoreUpdate(newScore);
         }
       }
       
@@ -538,11 +578,8 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
           mario.velocityY = -10;
           
           // Give points
-          setScore(prevScore => {
-            const newScore = prevScore + 200;
-            onScoreUpdate(newScore);
-            return newScore;
-          });
+          const newScore = scoreRef.current + 200;
+          handleScoreUpdate(newScore);
         }
         // Enemy hits Mario from the side
         else if (!mario.isShrinking &&
@@ -551,81 +588,70 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
                  mario.y + mario.height > enemy.y &&
                  mario.y < enemy.y + enemy.height) {
           // Lose a life
-          setLives(prevLives => {
-            const newLives = prevLives - 1;
-            onLivesUpdate(newLives);
-            
-            if (newLives <= 0) {
-              isGameOver = true;
-              onGameOver(score);
-            } else {
-              // Make Mario temporarily invulnerable
-              mario.isShrinking = true;
-              if (mario.shrinkTimeout) {
-                clearTimeout(mario.shrinkTimeout);
-              }
-              mario.shrinkTimeout = setTimeout(() => {
-                mario.isShrinking = false;
-              }, 2000);
-              
-              // Knockback
-              mario.velocityY = -10;
-              if (enemy.direction === -1) {
-                mario.velocityX = -10;
-              } else {
-                mario.velocityX = 10;
-              }
+          const newLives = livesRef.current - 1;
+          handleLivesUpdate(newLives);
+          
+          if (newLives <= 0) {
+            isGameOver = true;
+            handleGameOver(scoreRef.current);
+          } else {
+            // Make Mario temporarily invulnerable
+            mario.isShrinking = true;
+            if (mario.shrinkTimeout) {
+              clearTimeout(mario.shrinkTimeout);
             }
+            mario.shrinkTimeout = setTimeout(() => {
+              mario.isShrinking = false;
+            }, 2000);
             
-            return newLives;
-          });
+            // Knockback
+            mario.velocityY = -10;
+            if (enemy.direction === -1) {
+              mario.velocityX = -10;
+            } else {
+              mario.velocityX = 10;
+            }
+          }
         }
       }
       
       // Check if Mario reaches the flag
-      if (flag && !levelComplete &&
+      if (flag && !levelCompleteRef.current &&
           mario.x + mario.width > flag.x &&
           mario.x < flag.x + flag.width &&
           mario.y + mario.height > flag.y &&
           mario.y < flag.y + flag.height) {
-        setLevelComplete(true);
+        handleLevelComplete();
         
         // Add bonus points for completing level
-        setScore(prevScore => {
-          const newScore = prevScore + 1000;
-          onScoreUpdate(newScore);
-          return newScore;
-        });
+        const newScore = scoreRef.current + 1000;
+        handleScoreUpdate(newScore);
         
         // Wait a bit and then end game
         setTimeout(() => {
-          if (!isGameOver) {
+          if (!isGameOver && !gameOverRef.current) {
             isGameOver = true;
-            onGameOver(score + 1000); // Include the bonus points
+            handleGameOver(scoreRef.current + 1000); // Include the bonus points
           }
         }, 3000);
       }
       
       // Game over if Mario falls off screen
       if (mario.y > canvas.height) {
-        setLives(prevLives => {
-          const newLives = prevLives - 1;
-          onLivesUpdate(newLives);
-          
-          if (newLives <= 0) {
-            isGameOver = true;
-            onGameOver(score);
-          } else {
-            // Reset Mario position
-            mario.x = 50;
-            mario.y = groundY - MARIO_HEIGHT;
-            mario.velocityX = 0;
-            mario.velocityY = 0;
-            cameraOffset = 0;
-          }
-          
-          return newLives;
-        });
+        const newLives = livesRef.current - 1;
+        handleLivesUpdate(newLives);
+        
+        if (newLives <= 0) {
+          isGameOver = true;
+          handleGameOver(scoreRef.current);
+        } else {
+          // Reset Mario position
+          mario.x = 50;
+          mario.y = groundY - MARIO_HEIGHT;
+          mario.velocityX = 0;
+          mario.velocityY = 0;
+          cameraOffset = 0;
+        }
       }
     };
 
@@ -712,7 +738,7 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
         ctx.textAlign = 'center';
         ctx.fillText('LEVEL COMPLETE!', canvas.width/2, canvas.height/2);
         ctx.font = '18px Arial';
-        ctx.fillText(`Score: ${score + 1000}`, canvas.width/2, canvas.height/2 + 40);
+        ctx.fillText(`Score: ${scoreRef.current + 1000}`, canvas.width/2, canvas.height/2 + 40);
       }
     };
 
@@ -721,7 +747,7 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
       const deltaTime = timestamp - lastTime;
       lastTime = timestamp;
       
-      if (!isGameOver) {
+      if (!isGameOver && !gameOverRef.current) {
         update();
         render();
         requestAnimationFrame(gameLoop);
@@ -738,7 +764,7 @@ export default function SuperMarioGame({ onGameOver, onScoreUpdate, onLivesUpdat
         clearTimeout(mario.shrinkTimeout);
       }
     };
-  }, [onGameOver, onScoreUpdate, onLivesUpdate, isPaused]);
+  }, [onGameOver, onScoreUpdate, onLivesUpdate, isPaused, score, lives, levelComplete, handleScoreUpdate, handleLivesUpdate, handleGameOver, handleLevelComplete]);
 
   return (
     <canvas 
