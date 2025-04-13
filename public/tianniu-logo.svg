@@ -1,0 +1,31 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="90" fill="#4F46E5" />
+  <circle cx="100" cy="100" r="80" fill="#6366F1" />
+  
+  <!-- 牛角 -->
+  <path d="M55 70C50 50 30 45 25 60C20 80 35 85 55 70Z" fill="#F8FAFC" />
+  <path d="M145 70C150 50 170 45 175 60C180 80 165 85 145 70Z" fill="#F8FAFC" />
+  
+  <!-- 牛头 -->
+  <circle cx="100" cy="95" r="45" fill="#F8FAFC" />
+  
+  <!-- 牛鼻子 -->
+  <circle cx="90" cy="105" r="8" fill="#4F46E5" />
+  <circle cx="110" cy="105" r="8" fill="#4F46E5" />
+  
+  <!-- 牛眼睛 -->
+  <ellipse cx="80" cy="85" rx="7" ry="9" fill="#1E293B" />
+  <ellipse cx="120" cy="85" rx="7" ry="9" fill="#1E293B" />
+  <circle cx="78" cy="82" r="2" fill="white" />
+  <circle cx="118" cy="82" r="2" fill="white" />
+  
+  <!-- 游戏手柄元素 -->
+  <rect x="70" y="130" width="60" height="30" rx="15" fill="#1E293B" />
+  <circle cx="80" cy="145" r="6" fill="#F43F5E" />
+  <circle cx="100" cy="145" r="6" fill="#10B981" />
+  <circle cx="120" cy="145" r="6" fill="#3B82F6" />
+  
+  <!-- 恬牛字样 -->
+  <text x="100" y="170" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">恬牛游戏</text>
+</svg> 

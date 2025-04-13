@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "游戏平台 - 2D和3D游戏",
-  description: "一个可扩展的2D和3D游戏平台",
+  title: "恬牛游戏平台 - 2D和3D游戏",
+  description: "恬牛游戏平台 - 一个可扩展的2D和3D游戏平台",
 };
 
 export default function RootLayout({
@@ -28,6 +28,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/tianniu-logo.svg" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen`}

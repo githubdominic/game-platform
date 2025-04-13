@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,7 +12,14 @@ export default function Header() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-blue-600 dark:text-blue-500">游戏平台</span>
+              <Image 
+                src="/tianniu-logo.svg" 
+                alt="恬牛游戏平台" 
+                width={40} 
+                height={40} 
+                className="mr-2"
+              />
+              <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-500">恬牛游戏平台</span>
             </Link>
             <nav className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
@@ -38,7 +46,7 @@ export default function Header() {
           <div className="-mr-2 flex items-center sm:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             >
               <span className="sr-only">打开主菜单</span>
               {isMobileMenuOpen ? (
