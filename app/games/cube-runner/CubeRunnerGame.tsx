@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Box, OrbitControls } from '@react-three/drei';
 import { BufferGeometry, Mesh, Vector3 } from 'three';
@@ -105,7 +105,34 @@ function GameScene({ onGameOver, onScoreUpdate }: CubeRunnerGameProps) {
   const [obstacles, setObstacles] = useState<Array<[number, number, number]>>([]);
   const [gameSpeed, setGameSpeed] = useState(0.1);
   
+  // 使用useRef存储游戏状态，避免在渲染期间调用父组件的更新函数
+  const scoreRef = useRef(0);
+  const gameOverRef = useRef(false);
+  
+  // 使用useCallback包装回调函数
+  const handleScoreUpdate = useCallback((newScore: number) => {
+    scoreRef.current = newScore;
+    setScore(newScore);
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onScoreUpdate(newScore);
+    });
+  }, [onScoreUpdate]);
+  
+  const handleGameOver = useCallback((finalScore: number) => {
+    if (gameOverRef.current) return; // 防止重复调用
+    gameOverRef.current = true;
+    // 使用requestAnimationFrame确保在渲染之外调用
+    requestAnimationFrame(() => {
+      onGameOver(finalScore);
+    });
+  }, [onGameOver]);
+  
   useEffect(() => {
+    // 重置状态
+    scoreRef.current = 0;
+    gameOverRef.current = false;
+    
     // Create initial obstacles
     const newObstacles: Array<[number, number, number]> = [];
     for (let i = 0; i < 10; i++) {
@@ -120,21 +147,19 @@ function GameScene({ onGameOver, onScoreUpdate }: CubeRunnerGameProps) {
 
   useFrame(() => {
     // Increase score over time
-    setScore(prev => {
-      const newScore = prev + 1;
-      onScoreUpdate(newScore);
-      
-      // Increase game speed based on score
-      if (newScore % 500 === 0) {
-        setGameSpeed(prev => Math.min(prev + 0.02, 0.5));
-      }
-      
-      return newScore;
-    });
+    const newScore = scoreRef.current + 1;
+    handleScoreUpdate(newScore);
+    
+    // Increase game speed based on score
+    if (newScore % 500 === 0) {
+      setGameSpeed(prev => Math.min(prev + 0.02, 0.5));
+    }
   });
 
   const handleCollision = () => {
-    onGameOver(score);
+    if (!gameOverRef.current) {
+      handleGameOver(scoreRef.current);
+    }
   };
 
   return (
